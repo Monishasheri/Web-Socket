@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SocketIO Upvote</title>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        button#upvote-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button#upvote-btn:hover {
+            background-color: #45a049;
+        }
+
+        #upvote-count {
+            font-size: 1.2rem;
+            color: #555;
+            margin-top: 1rem;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <p class="title">Voting Count</p>
+            <button id="upvote-btn">Upvote</button>
+            <p id="upvote-count">0 Upvotes</p>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+            var btn = document.getElementById("upvote-btn");
+            var upvote_val = false;
+
+            btn.addEventListener("click", function(e) {
+                e.preventDefault();
+                upvote_val = upvote_val ? false : true;
+                socket.emit("upvote-event", upvote_val);
+            });
+
+            socket.on('update-upvotes', function(f_str) {
+            document.getElementById('upvote-count').innerHTML = f_str;
+            });
+        </script>
+    </body>
+</html>
